@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import scrolledtext
 
-# --- Sample data for previews and full results ---
+# --- Just example data ---
 sample_results = {
     "Wikipedia": {
         "preview": "An apple is a round, edible fruit...",
@@ -13,7 +13,7 @@ sample_results = {
     },
     "Thesaurus": {
         "preview": "(No preview available)",
-        "full": "Thesaurus: synonym suggestions not implemented in this mock version."
+        "full": "Thesaurus: synonym suggestions not implemented."
     }
 }
 
