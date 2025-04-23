@@ -70,7 +70,7 @@ def get_thesaurus(dictionarySetter):
         print()
 
     except:
-         print("No antonym entry found in Thesaurus")
+         print("No antonym entry found in Thesaurus", end="\n\n\n")
 
 # Separating this into an indivudal function may never be necessary, but it should
 # be useful if we need to get a random word any time other than at the beginning of
@@ -81,57 +81,78 @@ def generate_randWord(randomizer):
 
 def main():
     randomizer = RandomWord()
+    stopProgram = False
+    counter = 0
 
-    # User Input
-    print("Input: ",end="")
-    queryPhrase = input()
+    while (stopProgram == False):
+        wasSuccessful = False
 
-    if (queryPhrase == "do random"):
-        queryPhrase = randomizer.word()
+        # User Input
+        print("Input: ",end="")
+        queryPhrase = input()
 
-    print()
+        if (queryPhrase == "do random"):
+            queryPhrase = randomizer.word()
+        if (queryPhrase == "stop program"):
+            stopProgram = True
 
-    # Perform Wikipedia checking operation
-    try:
-        page = get_wikipedia(queryPhrase)
+        print()
 
-        if page.exists():     
-            # Wikipedia
-            print(page.title + " " + "(Wikipedia)")
-            print("--------------------------------------------------")
-            print(page.summary)
+        if (stopProgram == False):
+            # Perform Wikipedia checking operation
+            try:
+                page = get_wikipedia(queryPhrase)
+
+                if page.exists():     
+                    # Wikipedia
+                    print(page.title + " " + "(Wikipedia)")
+                    print("--------------------------------------------------")
+                    print(page.summary)
+                    print()
+
+                    wasSuccessful = True
+                else:
+                    print('Failed to fetch page from API.')
+
+                    print()
+            except:
+                print("No entry found on Wikipedia")
+
+            # Divide the text
             print()
-        else:
-            print('Failed to fetch page from API.')
+            print("- - - - - - - - - -")
+            print('\n')
 
-            print()
-    except:
-        print("No entry found on Wikipedia")
-
-    # Divide the text
-    print()
-    print("- - - - - - - - - -")
-    print('\n')
-
-    # Perform the Dictionary checking operation
-    try:
-        get_dictionary(queryPhrase)
-    except:
-        print("No entry found in Dictionary")
+            # Perform the Dictionary checking operation
+            try:
+                get_dictionary(queryPhrase)
+                wasSuccessful = True
+            except:
+                print("No entry found in Dictionary")
     
-    # Divide the text
-    print('\n')
-    print("- - - - - - - - - -")
-    print('\n')
+            # Divide the text
+            print('\n')
+            print("- - - - - - - - - -")
+            print('\n')
 
-    # Perform the Thesaurus checking operation
-    try:
-        get_thesaurus(queryPhrase)
-    except:
-        print(end="")
+            # Perform the Thesaurus checking operation
+            try:
+                get_thesaurus(queryPhrase)
+                # Assume that there is no case where dictionary finds nothing, syn finds nothing, but ant finds something
+            except:
+                print(end="")
+            
+            # If you want to add data to a structure, do it here, as it will exclude spam entries which find no results
+            if (wasSuccessful == True):
+                counter += 1
+            
+            print("Enter \"stop program\" in order to end")
+            print("Enter \"do random\" for a random word")
+            print("Total entries searched in this instance:", end=" ")
+            print(counter)
 
-    # Print again to separate the request to press a key to continue the program
-    print('\n')        
+            # Print again to separate the request to press a key to continue the program
+            print("\n\n")
 
 if __name__ == '__main__':
     main()
